@@ -8,18 +8,11 @@ Full stack django environment as docker image ready for `development` and `produ
 - `redis` (cache)
 - `celery` (`rabbitmq` as broker)
 
-## TL;DR
-
-- Develop: `docker-compose up` and [http://dockerhost:8000/](http://dockerhost:8000/)
-- Setup Deployment: `ansible-playbook ansible-playbook.yml`
-- Deploy `fab production deploy`
-
-
-## Development Setup
+## Development
 
 ### MacOS X
 
-**Requirements**
+**Setup**
 
 - `brew`
 - `pip`
@@ -32,13 +25,9 @@ boot2docker init
 ```
 
 In case of errors, try `boot2docker delete && boot2docker init` again.
-
 For more details, read [documentation](https://docs.docker.com/installation/mac/).
 
-**Create host alias for current VM IP**
-
-`echo $(boot2docker ip) dockerhost | sudo tee -a /etc/hosts`
-
+Create host alias for current docker host IP with `echo $(boot2docker ip) dockerhost | sudo tee -a /etc/hosts`.
 IP can change in future, update it in `/etc/hosts` if necessary.
 
 **Running**
@@ -59,13 +48,22 @@ Or something like `docker-compose run web python manage.py shell`
 
 - `ansible`
 
-### Server Setup Example
+### Server Setup
 
 - Ubuntu 14.04 x64 on Digital Ocean
 - Your SSH pub key in `authorized_keys` on server
-- Your server's IP or Domain in your ansible inventor (e.g. `/usr/local/etc/ansible/hosts`)
+- Your server's IP or Domain in your ansible inventor (e.g. `/usr/local/etc/ansible/hosts` like `myserver ansible_ssh_port=22 ansible_ssh_host=IP`)
 - And enter server's IP, Domain or pattern in `ansible-playbook.yml`
 - Run `ansible-playbook ansible-playbook.yml`
 
+### Deploy
 
+## Todos:
 
+- Add:
+  - [ ] Postgres / Postgis
+  - [ ] redis
+  - [ ] Rabbitmq
+  - [ ] Celery
+- [ ] ansible: use newest docker-compose version, not fixed one
+- [ ] ansible: don't use unstable docker.io. but stable uses still fig atm...

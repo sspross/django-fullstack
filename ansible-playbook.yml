@@ -1,11 +1,17 @@
 ---
-- hosts: testserver
+- hosts: myserver
   remote_user: root
 
   tasks:
     # update system
     - apt: update_cache=yes
     - apt: upgrade=full
+
+    # enable firewall
+    - name: install fail2ban
+      apt: name=fail2ban state=present
+    - name: activate firewall (only 22 and 80)
+      shell: ufw allow 22 && ufw allow 80 && ufw enable
 
     # install and configure webapp
     - name: install git
@@ -23,6 +29,8 @@
       notify: restart nginx
 
     # install docker and docker-compose
+    # todo: use newest docker compose version, not fixed
+    # todo: don't use unstable docker. but stable uses still fig atm.
     - apt_repository: repo='ppa:docker-maint/testing' state=present
     - apt: update_cache=yes
     - apt: name=docker.io state=present
