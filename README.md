@@ -38,9 +38,8 @@ $(boot2docker shellinit)
 docker-compose up
 ```
 
-Browse to [http://dockerhost:8000/](http://dockerhost:8000/)
-
-Or something like `docker-compose run web python manage.py shell`
+- Browse to [http://dockerhost:8000/](http://dockerhost:8000/)
+- Or something like `docker-compose run web python manage.py shell`
 
 ## Deployment
 
