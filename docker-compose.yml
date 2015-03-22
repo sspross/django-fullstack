@@ -1,0 +1,15 @@
+web:
+  build: .
+  command: python manage.py runserver 0.0.0.0:8000
+  volumes:
+    - webapp/:/app/
+  ports:
+    - "8000:8000"
+  # links:
+  #   - db
+  #   - redis
+  environment:
+    - INSTANCE_TYPE=web
+    - DEBUG=1
+    - DJANGO_SETTINGS_MODULE=webapp.settings.default
+    # - DATABASE_URL=postgres://postgres@db/postgres

@@ -1,0 +1,28 @@
+---
+- hosts: testserver
+  remote_user: root
+
+  tasks:
+    # update system
+    - apt: update_cache=yes
+    - apt: upgrade=full
+
+    # install and configure webapp
+    - name: install git
+      apt: name=git-core state=present
+    - name: create project directory
+      file: path=/opt/project state=directory
+    - name: checkout project source
+      git: repo=git@github.com:sspross/docker-django-fullstack.git dest=/opt/project accept_hostkey=yes
+
+    # install and configure nginx
+    - name: install nginx
+      apt: name=nginx state=present
+    - name: create nginx configuration
+      template: src=config/nginx.conf dest=/etc/nginx/sites-enabled/webapp.conf
+      notify: restart nginx
+
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
+
