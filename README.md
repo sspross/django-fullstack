@@ -10,7 +10,9 @@ Full stack django environment as docker image ready for `development` and `produ
 
 ## TL;DR
 
-`docker-compose up` and [http://dockerhost:8000/](http://dockerhost:8000/)
+- Develop: `docker-compose up` and [http://dockerhost:8000/](http://dockerhost:8000/)
+- Setup Deployment: `ansible-playbook ansible-playbook.yml`
+- Deploy `fab production deploy`
 
 
 ## Development Setup

@@ -22,7 +22,24 @@
       template: src=config/nginx.conf dest=/etc/nginx/sites-enabled/webapp.conf
       notify: restart nginx
 
+    # install docker and docker-compose
+    - apt_repository: repo='ppa:docker-maint/testing' state=present
+    - apt: update_cache=yes
+    - apt: name=docker.io state=present
+    - name: install docker-compose
+      shell: curl -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+    - file: path=/usr/local/bin/docker-compose mode="a+x"
+
+    # install supervisor
+    - apt: name=supervisor state=present
+    - file: path=/var/log/webapps/ state=directory
+    - name: create supervisor configuration
+      template: src=config/supervisord.conf dest=/etc/supervisor/conf.d/webapp.conf
+      notify: reread supervisord
+
   handlers:
     - name: restart nginx
       service: name=nginx state=restarted
+    - name: reread supervisord
+      shell: supervisorctl reread && supervisorctl update
 
