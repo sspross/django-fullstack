@@ -66,3 +66,7 @@ docker-compose up
   - [ ] Celery
 - [ ] ansible: use newest docker-compose version, not fixed one
 - [ ] ansible: don't use unstable docker.io. but stable uses still fig atm...
+
+- http://www.syncano.com/configuring-running-django-celery-docker-containers-pt-1/
+- http://davidmburke.com/2014/09/26/docker-in-dev-and-in-production-a-complete-and-diy-guide/
+
