@@ -1,5 +1,7 @@
 # docker-django-fullstack
 
+[![Docker Repository on Quay.io](https://quay.io/repository/sspross/docker-django-fullstack/status "Docker Repository on Quay.io")](https://quay.io/repository/sspross/docker-django-fullstack)
+
 Full stack django environment build on multiple docker containers ready for `development` and `production`.
 
 - `postgres` (`postgis` ready)
