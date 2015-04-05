@@ -1,6 +1,6 @@
 # docker-django-fullstack
 
-Full stack django environment with docker containers ready for `development` and `production`.
+Full stack django environment build on multiple docker containers ready for `development` and `production`.
 
 - `postgres` (`postgis` ready)
 - `nginx` (static serving)
@@ -43,12 +43,15 @@ docker-compose up
 
 ## Deployment
 
+### Use tutum
+brew install tutum
+
 ### Ubuntu Server
 
 **Requirements**
 
 - `ansible` on local machine
-- E.g. Ubuntu 14.04 x64 on Digital Ocean
+- Server E.g. Ubuntu 14.04 x64 on Digital Ocean
 - Your SSH pub key in `authorized_keys` on server
 - Your server's IP or Domain in your ansible inventor (e.g. `/usr/local/etc/ansible/hosts` like `myserver ansible_ssh_port=22 ansible_ssh_host=IP`)
 - And enter server's IP, Domain or pattern in `ansible-playbook.yml`
@@ -73,11 +76,8 @@ gcloud alpha container clusters create guestbook
 ## Todos:
 
 - Add:
-  - [ ] Move nginx into container
-  - [ ] Postgres / Postgis
-  - [ ] redis
-  - [ ] Rabbitmq
-  - [ ] Celery
+    - [ ] Add Celery test
+    - [ ] Postgres / Postgis
 - [ ] ansible: use newest docker-compose version, not fixed one
 - [ ] ansible: don't use unstable docker.io. but stable uses still fig atm...
 - [ ] user Kubernetes with GCE
@@ -88,6 +88,6 @@ gcloud alpha container clusters create guestbook
 
 ### Tipps & Tricks
 
-- Delete all docker containers `docker rm $(docker ps -a -q)`
+- Delete all docker containers `docker rm -f $(docker ps -a -q)`
 - Delete all docker images `docker rmi -f $(docker images -q)`
 

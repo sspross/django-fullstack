@@ -3,8 +3,8 @@ RUN apt-get update
 RUN apt-get install -y python-pip python-dev python-psycopg2
 RUN rm -rf /var/lib/apt/lists/*
 
-COPY webapp/REQUIREMENTS /app/REQUIREMENTS
-WORKDIR /app/
+COPY webapp/ /code/
+WORKDIR /code/
 RUN pip install -r REQUIREMENTS
 RUN rm REQUIREMENTS
 

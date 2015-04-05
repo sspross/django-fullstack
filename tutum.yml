@@ -10,17 +10,17 @@ rabbitmq:
     - RABBITMQ_PASS=mypass
 
 django:
-  build: .
+  image: tutum.co/sspross/dockerdjangofullstack_django
   command: su -m myuser -c "gunicorn wsgi:application -b 0.0.0.0:8000"
   volumes:
     - /code/
-    - webapp/:/code/
+    # - webapp/:/code/
   environment:
     - DEBUG=True
     - DJANGO_SETTINGS_MODULE=webapp.settings.default
     - HTTPS=off
     - SECRET_KEY=asfasfasfasdfasdfsadfsadfasdfasafasd
-    - VIRTUAL_HOST=dockerhost
+    - VIRTUAL_HOST=nginx.docker-django-fullstack.sspross.svc.tutum.io
   expose:
     - '8000'
   links:
@@ -29,7 +29,7 @@ django:
     - rabbitmq:rabbitmq
 
 worker:
-  build: .
+  image: tutum.co/sspross/dockerdjangofullstack_worker
   command: su -m myuser -c "celery -A webapp worker -l info -Ofair"
   volumes_from:
     - django
