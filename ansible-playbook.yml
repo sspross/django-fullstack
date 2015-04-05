@@ -7,11 +7,14 @@
     - apt: update_cache=yes
     - apt: upgrade=full
 
-    # enable firewall
+    # enable firewall and fail2ban
+    # todo: improve https://github.com/phred/5minbootstrap/blob/master/bootstrap.yml
     - name: install fail2ban
       apt: name=fail2ban state=present
     - name: activate firewall (only 22 and 80)
-      shell: ufw allow 22 && ufw allow 80 && ufw enable
+      ufw: state=enabled policy=reject
+      ufw: rule=allow port=22
+      ufw: rule=allow port=80
 
     # install and configure webapp
     - name: install git
@@ -20,13 +23,6 @@
       file: path=/opt/project state=directory
     - name: checkout project source
       git: repo=git@github.com:sspross/docker-django-fullstack.git dest=/opt/project accept_hostkey=yes
-
-    # install and configure nginx
-    - name: install nginx
-      apt: name=nginx state=present
-    - name: create nginx configuration
-      template: src=config/nginx.conf dest=/etc/nginx/sites-enabled/webapp.conf
-      notify: restart nginx
 
     # install docker and docker-compose
     # todo: use newest docker compose version, not fixed
@@ -46,8 +42,6 @@
       notify: reread supervisord
 
   handlers:
-    - name: restart nginx
-      service: name=nginx state=restarted
     - name: reread supervisord
       shell: supervisorctl reread && supervisorctl update
 

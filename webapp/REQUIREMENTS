@@ -1,1 +1,11 @@
 Django
+gunicorn
+hiredis
+redis
+raven
+celery
+django-redis
+dj-database-url
+django-cache-url
+psycopg2
+django-debreach

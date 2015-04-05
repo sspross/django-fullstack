@@ -1,6 +1,6 @@
 # docker-django-fullstack
 
-Full stack django environment as docker image ready for `development` and `production`.
+Full stack django environment with docker containers ready for `development` and `production`.
 
 - `postgres` (`postgis` ready)
 - `nginx` (static serving)
@@ -43,30 +43,51 @@ docker-compose up
 
 ## Deployment
 
+### Ubuntu Server
+
 **Requirements**
 
-- `ansible`
-
-### Server Setup
-
-- Ubuntu 14.04 x64 on Digital Ocean
+- `ansible` on local machine
+- E.g. Ubuntu 14.04 x64 on Digital Ocean
 - Your SSH pub key in `authorized_keys` on server
 - Your server's IP or Domain in your ansible inventor (e.g. `/usr/local/etc/ansible/hosts` like `myserver ansible_ssh_port=22 ansible_ssh_host=IP`)
 - And enter server's IP, Domain or pattern in `ansible-playbook.yml`
 - Run `ansible-playbook ansible-playbook.yml`
+
+### Google Compute Engine
+
+- create account and project at https://console.developers.google.com/project
+- install google cloud sdk on local machine https://cloud.google.com/sdk/
+- run `gcloud auth login`
+- set current project `gcloud config set project PROJECT`
+
+gcloud components update alpha
+gcloud config set compute/zone europe-west1-b
+gcloud alpha container clusters create guestbook
+
+
+
 
 ### Deploy
 
 ## Todos:
 
 - Add:
+  - [ ] Move nginx into container
   - [ ] Postgres / Postgis
   - [ ] redis
   - [ ] Rabbitmq
   - [ ] Celery
 - [ ] ansible: use newest docker-compose version, not fixed one
 - [ ] ansible: don't use unstable docker.io. but stable uses still fig atm...
+- [ ] user Kubernetes with GCE
 
 - http://www.syncano.com/configuring-running-django-celery-docker-containers-pt-1/
 - http://davidmburke.com/2014/09/26/docker-in-dev-and-in-production-a-complete-and-diy-guide/
+
+
+### Tipps & Tricks
+
+- Delete all docker containers `docker rm $(docker ps -a -q)`
+- Delete all docker images `docker rmi -f $(docker images -q)`
 

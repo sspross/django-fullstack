@@ -1,15 +1,56 @@
-web:
+db:
+  image: postgres
+
+redis:
+  image: redis
+
+rabbitmq:
+  image: tutum/rabbitmq
+  environment:
+    - RABBITMQ_PASS=mypass
+
+worker:
   build: .
-  command: python manage.py runserver 0.0.0.0:8000
+  command: su -m myuser -c "celery -A webapp worker -l info -Ofair"
   volumes:
     - webapp/:/app/
-  ports:
-    - "8000:8000"
-  # links:
-  #   - db
-  #   - redis
+  links:
+    - db:db
+    - rabbitmq:rabbitmq
+    - redis:redis
   environment:
-    - INSTANCE_TYPE=web
-    - DEBUG=1
+    - DEBUG=False
     - DJANGO_SETTINGS_MODULE=webapp.settings.default
-    # - DATABASE_URL=postgres://postgres@db/postgres
+    - SECRET_KEY=asfasfasfasdfasdfsadfsadfasdfasafasd
+
+django:
+  build: .
+  command: su -m myuser -c "gunicorn wsgi:application -b 0.0.0.0:8000"
+  expose:
+    - "8000"
+  volumes:
+    - webapp/:/app/
+  links:
+    - db:db
+    - rabbitmq:rabbitmq
+    - redis:redis
+  environment:
+    - VIRTUAL_HOST=dockerhost
+    - HTTPS=off
+    - DEBUG=True
+    - DJANGO_SETTINGS_MODULE=webapp.settings.default
+    - SECRET_KEY=asfasfasfasdfasdfsadfsadfasdfasafasd
+
+nginx:
+  image: jwilder/nginx-proxy
+  volumes:
+    - vhost.d:/etc/nginx/vhost.d:ro
+    # - webapp/htdocs/:/app/htdocs/:ro
+    - webapp/static/:/app/static/:ro
+    - webapp/media/:/app/media/:ro
+    - /var/run/docker.sock:/tmp/docker.sock
+  ports:
+    - "80:80"
+    # - "443:443"
+  links:
+    - django:django
