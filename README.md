@@ -48,7 +48,7 @@ docker-compose up
 ```
 
 - Browse to [http://dockerhost/](http://dockerhost/)
-- Or so something like `docker-compose run django python manage.py shell|migrate|collectstatic`
+- Or run something like `docker-compose run django python manage.py shell`
 
 ## Deployment
 
@@ -70,18 +70,37 @@ You can deploy this app in many different ways of course. E.g. just checking it 
 0. Update `VIRTUAL_HOST` of `django` in `tutum.yml`to `nginx.YOURDJANGOPROJECT.YOURUSER.svc.tutum.io` and use it to create a new stack on tutum.co
 0. Start it and browse to [http://nginx.YOURDJANGOPROJECT.YOURUSER.svc.tutum.io/](http://nginx.YOURDJANGOPROJECT.YOURUSER.svc.tutum.io/)
 
+## Thoughts
+
+### development
+
+- link code as volume, don't ADD it into image
+- how can I separate dev from prod??
+- we should use `manage.py runserver` to take advantage of code hot reload
+- same goes for static files like scss etc. find a way...
+
+### production
+
+- here we should use gunicorn
+- creating docker image: ADD code including `collectstatic` and `compilemessage` stuff.
+
 ## Todos:
 
-- [ ] Fix code live editing in development
+- [x] Fix code live editing in development
+- [ ] should we `collectstatic` and `compilemessages` do while building image and only `migrate` while running?
 - [ ] how to deploy code updates right....
-- [ ] `docker-compose.yml` and `tutum.yml` are very similar....
+- [ ] `docker-compose.yml` and `tutum.yml` are very similar.... organise into dev, stage, prod etc.
+- [x] static serving is production style right now, bad for development?
 - [ ] How to use a domain... and is this `vhost.d` the best way?
+- [ ] Move secret key away from env
+- [ ] Add https support
 - [ ] Add Celery test
 - [ ] Add Postgis
 - [ ] Try Kubernetes (with GCE)
 
 ## Tipps & Tricks
 
+- Delete a specific container including its volumes `docker rm -v [container]`
 - Delete all docker containers `docker rm -f $(docker ps -a -q)`
 - Delete all docker images `docker rmi -f $(docker images -q)`
 

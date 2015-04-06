@@ -11,15 +11,13 @@ rabbitmq:
 
 django:
   build: .
-  command: /bin/sh run.sh
+  command: su -m myuser -c "python manage.py runserver 0.0.0.0:8000"
   volumes:
-    - /code/
-    - webapp/:/code/
+    - webapp/:/source/
   environment:
     - DEBUG=True
     - DJANGO_SETTINGS_MODULE=webapp.settings.default
     - HTTPS=off
-    - SECRET_KEY=asfasfasfasdfasdfsadfsadfasdfasafasd
     - VIRTUAL_HOST=dockerhost
   expose:
     - '8000'
@@ -36,7 +34,6 @@ worker:
   environment:
     - DEBUG=False
     - DJANGO_SETTINGS_MODULE=webapp.settings.default
-    - SECRET_KEY=asfasfasfasdfasdfsadfsadfasdfasafasd
   links:
     - db:db
     - redis:redis
@@ -47,10 +44,9 @@ nginx:
   volumes_from:
     - django
   volumes:
-    - /code/vhost.d:/etc/nginx/vhost.d:ro
+    - /source/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
     - /var/run/docker.sock:/tmp/docker.sock
   ports:
     - '80:80'
-    # - '443:443'
   links:
     - django:django

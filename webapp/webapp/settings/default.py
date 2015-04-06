@@ -12,7 +12,7 @@ DEBUG = os.environ.get('DEBUG')
 ADMINS = (
     ('admin', 'admin@webapp.com'),
 )
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = 'asfasfasfasdfasdfsadfsadfasdfasafasd'
 ALLOWED_HOSTS = ["*"]
 LANGUAGE_CODE = 'en'
 LANGUAGES = (

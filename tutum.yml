@@ -10,16 +10,14 @@ rabbitmq:
     - RABBITMQ_PASS=mypass
 
 django:
-  image: quay.io/sspross/docker-django-fullstack:master
-  command: /bin/sh run.sh
+  image: quay.io/sspross/django-fullstack:master
+  command: su -m myuser -c "gunicorn wsgi:application -b 0.0.0.0:8000"
   volumes:
-    - /code/
-    # - webapp/:/code/
+    - /source/
   environment:
     - DEBUG=True
     - DJANGO_SETTINGS_MODULE=webapp.settings.default
     - HTTPS=off
-    - SECRET_KEY=asfasfasfasdfasdfsadfsadfasdfasafasd
     - VIRTUAL_HOST=nginx.docker-django-fullstack.sspross.svc.tutum.io
   expose:
     - '8000'
@@ -29,14 +27,13 @@ django:
     - rabbitmq:rabbitmq
 
 worker:
-  image: quay.io/sspross/docker-django-fullstack:master
+  image: quay.io/sspross/django-fullstack:master
   command: su -m myuser -c "celery -A webapp worker -l info -Ofair"
   volumes_from:
     - django
   environment:
     - DEBUG=False
     - DJANGO_SETTINGS_MODULE=webapp.settings.default
-    - SECRET_KEY=asfasfasfasdfasdfsadfsadfasdfasafasd
   links:
     - db:db
     - redis:redis
@@ -47,10 +44,9 @@ nginx:
   volumes_from:
     - django
   volumes:
-    - /code/vhost.d:/etc/nginx/vhost.d:ro
+    - /source/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
     - /var/run/docker.sock:/tmp/docker.sock
   ports:
     - '80:80'
-    # - '443:443'
   links:
     - django:django
