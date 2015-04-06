@@ -73,6 +73,7 @@ You can deploy this app in many different ways of course. E.g. just checking it 
 ## Todos:
 
 - [ ] Fix code live editing in development
+- [ ] how to deploy code updates right....
 - [ ] `docker-compose.yml` and `tutum.yml` are very similar....
 - [ ] How to use a domain... and is this `vhost.d` the best way?
 - [ ] Add Celery test

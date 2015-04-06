@@ -11,7 +11,7 @@ rabbitmq:
 
 django:
   build: .
-  command: su -m myuser -c "gunicorn wsgi:application -b 0.0.0.0:8000"
+  command: /bin/sh run.sh
   volumes:
     - /code/
     - webapp/:/code/
