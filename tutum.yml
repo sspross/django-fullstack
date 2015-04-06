@@ -41,12 +41,7 @@ worker:
 
 nginx:
   image: jwilder/nginx-proxy
-  volumes_from:
-    - django
   volumes:
-    - /source/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro
     - /var/run/docker.sock:/tmp/docker.sock
   ports:
     - '80:80'
-  links:
-    - django:django
