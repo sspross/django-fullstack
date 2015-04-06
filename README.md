@@ -1,14 +1,21 @@
-# docker-django-fullstack
+# django-fullstack
 
-[![Docker Repository on Quay.io](https://quay.io/repository/sspross/docker-django-fullstack/status "Docker Repository on Quay.io")](https://quay.io/repository/sspross/docker-django-fullstack)
+[![Docker Repository on Quay.io](https://quay.io/repository/sspross/django-fullstack/status "Docker Repository on Quay.io")](https://quay.io/repository/sspross/django-fullstack)
 
-Full stack django environment build on multiple docker containers ready for `development` and `production`.
+Full stack django example project build on multiple docker containers ready for `development` and `production`.
 
-- `postgres` (`postgis` ready)
-- `nginx` (static serving)
-- `gunicorn` (app server)
-- `redis` (cache)
-- `celery` (`rabbitmq` as broker)
+**Batteries**
+
+- `postgres` (with `postgis` and `hstore` extensions)
+- `nginx` 
+- `gunicorn` 
+- `redis` 
+- `celery`
+- `rabbitmq`
+
+**Create your own**
+
+This repository is an instance of [cookiecutter-django-fullstack](https://github.com/sspross/cookiecutter-django-fullstack). Check it out to create your own django fullstack project.
 
 ## Development
 
@@ -41,54 +48,38 @@ docker-compose up
 ```
 
 - Browse to [http://dockerhost/](http://dockerhost/)
-- Or something like `docker-compose run django python manage.py shell|migrate|collectstatic`
+- Or so something like `docker-compose run django python manage.py shell|migrate|collectstatic`
 
 ## Deployment
 
-### Use tutum
-brew install tutum
+### Docker Registry
 
-### Ubuntu Server
+Register your django app image (e.g. this repo) to a docker registry. E.g. [quay.io](https://quay.io/), which builds your container images on git push.
 
-**Requirements**
+0. Push your repository to GitHub
+0. Create an account on [quay.io](https://quay.io/)
+0. Add a repository and link it to your GitHub repository
+0. Update `image`s of `django` and `worker` in `tutum.yml` to `quay.io/YOURUSER/YOURDJANGOPROJECT`  
 
-- `ansible` on local machine
-- Server E.g. Ubuntu 14.04 x64 on Digital Ocean
-- Your SSH pub key in `authorized_keys` on server
-- Your server's IP or Domain in your ansible inventor (e.g. `/usr/local/etc/ansible/hosts` like `myserver ansible_ssh_port=22 ansible_ssh_host=IP`)
-- And enter server's IP, Domain or pattern in `ansible-playbook.yml`
-- Run `ansible-playbook ansible-playbook.yml`
+### Managed Cloud Deployment
 
-### Google Compute Engine
+You can deploy this app in many different ways of course. E.g. just checking it out on a server and running it with `docker-compose` (not recommended for production use and that's so 2014). So we use [tutum.co](https://www.tutum.co/) to manage our cloud (nodes on e.g. DigitalOcean or Amazon) and deployment of our docker images. 
 
-- create account and project at https://console.developers.google.com/project
-- install google cloud sdk on local machine https://cloud.google.com/sdk/
-- run `gcloud auth login`
-- set current project `gcloud config set project PROJECT`
-
-gcloud components update alpha
-gcloud config set compute/zone europe-west1-b
-gcloud alpha container clusters create guestbook
-
-
-
-
-### Deploy
+0. Create an account on [tutum.co](https://www.tutum.co/)
+0. Create at least 1 node (e.g. on DigitalOcean). How many nodes you need and which containers are best on which nodes depends heavy on your kind of application. But you can change this later very easy thanks to tutum.co
+0. Update `VIRTUAL_HOST` of `django` in `tutum.yml`to `nginx.YOURDJANGOPROJECT.YOURUSER.svc.tutum.io` and use it to create a new stack on tutum.co
+0. Start it and browse to [http://nginx.YOURDJANGOPROJECT.YOURUSER.svc.tutum.io/](http://nginx.YOURDJANGOPROJECT.YOURUSER.svc.tutum.io/)
 
 ## Todos:
 
-- Add:
-    - [ ] Add Celery test
-    - [ ] Postgres / Postgis
-- [ ] ansible: use newest docker-compose version, not fixed one
-- [ ] ansible: don't use unstable docker.io. but stable uses still fig atm...
-- [ ] user Kubernetes with GCE
+- [ ] Fix code live editing in development
+- [ ] `docker-compose.yml` and `tutum.yml` are very similar....
+- [ ] How to use a domain... and is this `vhost.d` the best way?
+- [ ] Add Celery test
+- [ ] Add Postgis
+- [ ] Try Kubernetes (with GCE)
 
-- http://www.syncano.com/configuring-running-django-celery-docker-containers-pt-1/
-- http://davidmburke.com/2014/09/26/docker-in-dev-and-in-production-a-complete-and-diy-guide/
-
-
-### Tipps & Tricks
+## Tipps & Tricks
 
 - Delete all docker containers `docker rm -f $(docker ps -a -q)`
 - Delete all docker images `docker rmi -f $(docker images -q)`
