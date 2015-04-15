@@ -10,4 +10,3 @@ RUN rm REQUIREMENTS
 
 # create unprivileged user
 RUN adduser --disabled-password --gecos '' myuser
-COPY webapp/nginx.conf /etc/nginx/conf.d/nginx.conf
