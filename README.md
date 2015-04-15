@@ -15,7 +15,9 @@ Full stack django example project build on multiple docker containers ready for 
 
 **Create your own**
 
-This repository is an instance of [cookiecutter-django-fullstack](https://github.com/sspross/cookiecutter-django-fullstack). Check it out to create your own django fullstack project.
+`git clone git@github.com:sspross/django-fullstack.git your-project-name && cd your-project-name && git remote rm origin`
+
+~~This repository is an instance of [cookiecutter-django-fullstack](https://github.com/sspross/cookiecutter-django-fullstack). Check it out to create your own django fullstack project.~~
 
 ## Development
 
@@ -27,8 +29,7 @@ This repository is an instance of [cookiecutter-django-fullstack](https://github
 - `pip`
 
 ```
-brew install docker boot2docker
-sudo pip install docker-compose
+brew install docker boot2docker docker-compose
 boot2docker upgrade
 boot2docker init
 ```
@@ -78,6 +79,8 @@ You can deploy this app in many different ways of course. E.g. just checking it 
 - how can I separate dev from prod??
 - we should use `manage.py runserver` to take advantage of code hot reload
 - same goes for static files like scss etc. find a way...
+- how to use python env? e.g. open sublime in it...
+- what about `gulp`, `webpack-server`....
 
 ### production
 

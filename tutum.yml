@@ -44,6 +44,7 @@ nginx:
   volumes_from:
     - django
   volumes:
+    - /source/nginx:/etc/nginx/vhost.d:ro
     - /var/run/docker.sock:/tmp/docker.sock
   ports:
     - '80:80'

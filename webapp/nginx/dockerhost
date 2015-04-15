@@ -5,11 +5,11 @@
 
   client_max_body_size       100m;
   client_body_buffer_size    128k;
-  location  /media/ {
+  location /media/ {
     alias /source/media/;
     expires 7d;
   }
-  location  /static/ {
+  location /static/ {
     alias /source/static/;
     expires 7d;
   }
