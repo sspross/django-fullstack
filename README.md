@@ -25,8 +25,7 @@ Full stack django example project build on multiple docker containers ready for 
 
 **Setup**
 
-- `brew`
-- `pip`
+- `brew` is required, see [brew.sh](http://brew.sh/)
 
 ```
 brew install docker boot2docker docker-compose
